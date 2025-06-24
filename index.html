@@ -1,0 +1,308 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>119派遣台網路斷線應變流程練習</title>
+    <!-- 引入 Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            -webkit-font-smoothing: antialiased;
+            -moz-osx-font-smoothing: grayscale;
+        }
+    </style>
+    <!-- 引入 React 和 ReactDOM CDN -->
+    <script crossorigin src="https://unpkg.com/react@18/umd/react.production.min.js"></script>
+    <script crossorigin src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js"></script>
+    <!-- 引入 Babel 轉換 JSX (僅用於開發或簡單部署，生產環境應預編譯) -->
+    <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+</head>
+<body>
+    <div id="root"></div> <!-- React 應用將被掛載到此元素 -->
+
+    <script type="text/babel">
+        // 在這裡放入你的 React App 組件代碼
+        // 將你之前 'network_disconnection_practice_app' 中的所有 React.js 代碼複製到這裡
+        // 從 `import React, { useState } from 'react';` 到 `export default App;` 的所有內容
+
+        // 主應用程式組件
+        function App() {
+            // 定義所有操作步驟的數據
+            const steps = [
+                {
+                    id: 1,
+                    title: '步驟一：通知與開通VPN',
+                    description: '請立即通知中心網路斷線情況，並請其以電話派遣，同時轉知資訊人員協助開通防火牆VPN帳號，並登出派遣系統。',
+                    actionText: '我已通知並登出',
+                    illustration: 'https://placehold.co/300x150/e0e7ff/3f51b5?text=Notify+Center' // Placeholder image
+                },
+                {
+                    id: 2,
+                    title: '步驟二：模擬斷網測試處理 (若適用)',
+                    description: '若為模擬斷網測試期間，請拔掉電腦主機端網路線。若非測試，請直接點擊「跳過此步」。',
+                    actionText: '我已拔線',
+                    skipText: '跳過此步 (非測試)',
+                    illustration: 'https://placehold.co/300x150/e0e7ff/3f51b5?text=Unplug+Cable'
+                },
+                {
+                    id: 3,
+                    title: '步驟三：平板設定 - 連接選單',
+                    description: '拿起平板，點選「設定」→「連接」。',
+                    actionText: '我已進入連接選單',
+                    illustration: 'https://placehold.co/300x150/e0e7ff/3f51b5?text=Tablet+Settings'
+                },
+                {
+                    id: 4,
+                    title: '步驟四：平板設定 - 行動數據',
+                    description: '關閉「Wi-Fi」與「藍牙」，然後點選「數據使用量」並打開「行動數據」。',
+                    actionText: '我已開啟行動數據',
+                    illustration: 'https://placehold.co/300x150/e0e7ff/3f51b5?text=Mobile+Data'
+                },
+                {
+                    id: 5,
+                    title: '步驟五：平板設定 - 行動無線基地台與網路共享',
+                    description: '點選「行動無線基地台與網路共享」。',
+                    actionText: '我已進入網路共享設定',
+                    illustration: 'https://placehold.co/300x150/e0e7ff/3f51b5?text=Hotspot+Sharing'
+                },
+                {
+                    id: 6,
+                    title: '步驟六：平板設定 - 連接電腦',
+                    description: '將平板以充電數據線連接119派遣台電腦主機。',
+                    actionText: '我已連接平板',
+                    illustration: 'https://placehold.co/300x150/e0e7ff/3f51b5?text=Connect+Tablet'
+                },
+                {
+                    id: 7,
+                    title: '步驟七：平板設定 - USB網路共享',
+                    description: '開啟「USB網路共享」。若無法開啟，請重新拔插主機端USB數據線，讓電腦讀取到連接訊息後再試。',
+                    actionText: '我已開啟USB網路共享',
+                    illustration: 'https://placehold.co/300x150/e0e7ff/3f51b5?text=Enable+USB+Tethering'
+                },
+                {
+                    id: 8,
+                    title: '步驟八：電腦設定 - 確認網路',
+                    description: '開啟電腦網頁 (如Yahoo或Youtube)，確認已連接平板網路。',
+                    actionText: '我已確認網路連線',
+                    illustration: 'https://placehold.co/300x150/e0e7ff/3f51b5?text=Verify+Network'
+                },
+                {
+                    id: 9,
+                    title: '步驟九：電腦設定 - 開啟VPN',
+                    description: '開啟電腦桌面捷徑圖示「FortiClient VPN」。',
+                    actionText: '我已開啟FortiClient VPN',
+                    illustration: 'https://placehold.co/300x150/e0e7ff/3f51b5?text=Open+FortiClient'
+                },
+                {
+                    id: 10,
+                    title: '步驟十：電腦設定 - 連接VPN (第一組)',
+                    description: '選擇第一組VPN名稱，輸入密碼，點選「連接」。(若有安全性警訊請直接點開)',
+                    actionText: '我已連接第一組VPN',
+                    illustration: 'https://placehold.co/300x150/e0e7ff/3f51b5?text=Connect+VPN+1'
+                },
+                {
+                    id: 11,
+                    title: '步驟十一：電腦設定 - 更改IP地址',
+                    description: '通知中心更改派遣台IP地址。(IP地址如FortiClient VPN介面所示)',
+                    actionText: '我已通知並更改IP',
+                    illustration: 'https://placehold.co/300x150/e0e7ff/3f51b5?text=Update+IP'
+                },
+                {
+                    id: 12,
+                    title: '步驟十二：電腦設定 - 重新登入派遣系統',
+                    description: '先登出119派遣系統後再重新登入。',
+                    actionText: '我已重新登入派遣系統',
+                    illustration: 'https://placehold.co/300x150/e0e7ff/3f51b5?text=Re-login'
+                },
+                {
+                    id: 13,
+                    title: '步驟十三：電腦設定 - 測試連線',
+                    description: '請中心發送測試案件，確認連線是否正常。',
+                    actionText: '我已確認連線正常',
+                    illustration: 'https://placehold.co/300x150/e0e7ff/3f51b5?text=Test+Connection'
+                },
+                {
+                    id: 14,
+                    title: '步驟十四：電腦設定 - 中斷連接 (第一組)',
+                    description: '測試完成後「中斷連接」第一組VPN。',
+                    actionText: '我已中斷第一組VPN',
+                    illustration: 'https://placehold.co/300x150/e0e7ff/3f51b5?text=Disconnect+VPN+1'
+                },
+                {
+                    id: 15,
+                    title: '步驟十五：電腦設定 - 連接VPN (第二組) & 測試',
+                    description: '重新執行步驟10至14，測試第二組VPN。',
+                    actionText: '我已完成第二組VPN測試',
+                    illustration: 'https://placehold.co/300x150/e0e7ff/3f51b5?text=Test+VPN+2'
+                },
+                {
+                    id: 16,
+                    title: '步驟十六：模擬斷網測試結束處理 (可選)',
+                    description: '若為模擬斷網測試結束，請接回電腦主機端網路線。若非測試，請直接點擊「跳過此步」。',
+                    actionText: '我已接回網路線',
+                    skipText: '跳過此步 (非測試)',
+                    illustration: 'https://placehold.co/300x150/e0e7ff/3f51b5?text=Reconnect+Cable'
+                },
+                {
+                    id: 17,
+                    title: '步驟十七：網路恢復正常 - 通知與IP回歸',
+                    description: '通知中心網路恢復正常(或模擬斷網測試結束)，並請中心協助更改回分隊119派遣台原始IP地址。',
+                    actionText: '我已通知並回歸IP',
+                    illustration: 'https://placehold.co/300x150/e0e7ff/3f51b5?text=Notify+Restoration'
+                },
+                {
+                    id: 18,
+                    title: '步驟十八：網路恢復正常 - 登出系統',
+                    description: '電腦登出119派遣系統。',
+                    actionText: '我已登出派遣系統',
+                    illustration: 'https://placehold.co/300x150/e0e7ff/3f51b5?text=Logout+System'
+                },
+                {
+                    id: 19,
+                    title: '步驟十九：網路恢復正常 - 中斷VPN連接 (最終)',
+                    description: '開啟電腦桌面捷徑圖示「FortiClient VPN」，點選「中斷連接」按鍵。',
+                    actionText: '我已中斷VPN連接',
+                    illustration: 'https://placehold.co/300x150/e0e7ff/3f51b5?text=Disconnect+VPN'
+                },
+                {
+                    id: 20,
+                    title: '步驟二十：網路恢復正常 - 移除平板',
+                    description: '將平板與電腦移除連接。',
+                    actionText: '我已移除平板',
+                    illustration: 'https://placehold.co/300x150/e0e7ff/3f51b5?text=Remove+Tablet'
+                },
+                {
+                    id: 21,
+                    title: '步驟二十一：網路恢復正常 - 重啟登入',
+                    description: '電腦重新開機並登入119派遣系統。',
+                    actionText: '我已重啟並登入',
+                    illustration: 'https://placehold.co/300x150/e0e7ff/3f51b5?text=Reboot+Login'
+                },
+                {
+                    id: 22,
+                    title: '步驟二十二：網路恢復正常 - 最終確認',
+                    description: '請中心發送測試案件，最終確認連線是否正常。',
+                    actionText: '我已最終確認連線正常',
+                    illustration: 'https://placehold.co/300x150/e0e7ff/3f51b5?text=Final+Confirmation'
+                },
+            ];
+
+            // 使用 useState 管理當前步驟的索引
+            const [currentStepIndex, setCurrentStepIndex] = useState(0);
+
+            // 處理「下一步」按鈕點擊事件
+            const handleNext = () => {
+                if (currentStepIndex < steps.length - 1) {
+                    setCurrentStepIndex(prevIndex => prevIndex + 1);
+                }
+            };
+
+            // 處理「上一步」按鈕點擊事件
+            const handlePrevious = () => {
+                if (currentStepIndex > 0) {
+                    setCurrentStepIndex(prevIndex => prevIndex - 1);
+                }
+            };
+
+            // 處理「重新開始」按鈕點擊事件
+            const handleRestart = () => {
+                setCurrentStepIndex(0);
+            };
+
+            // 判斷是否為最後一個步驟
+            const isLastStep = currentStepIndex === steps.length - 1;
+
+            // 獲取當前步驟的數據
+            const currentStep = steps[currentStepIndex];
+
+            return (
+                <div className="flex flex-col items-center justify-center min-h-screen bg-gradient-to-br from-blue-50 to-indigo-100 p-4">
+                    <div className="bg-white rounded-2xl shadow-xl p-8 max-w-2xl w-full text-center">
+                        <h1 className="text-4xl font-extrabold text-blue-800 mb-6 border-b-4 border-blue-600 pb-4">
+                            119派遣台網路斷線應變流程練習
+                        </h1>
+
+                        {/* 進度條 */}
+                        <div className="w-full bg-gray-200 rounded-full h-4 mb-8">
+                            <div
+                                className="bg-blue-600 h-4 rounded-full transition-all duration-500 ease-out"
+                                style={{ width: `${((currentStepIndex + 1) / steps.length) * 100}%` }}
+                            ></div>
+                        </div>
+
+                        {/* 步驟內容顯示 */}
+                        {currentStep ? (
+                            <div className="mb-8">
+                                <h2 className="text-3xl font-bold text-indigo-700 mb-4">{currentStep.title}</h2>
+                                <img
+                                    src={currentStep.illustration}
+                                    alt={`Illustration for ${currentStep.title}`}
+                                    className="mx-auto my-4 rounded-lg shadow-md max-w-full h-auto"
+                                    onError={(e) => { e.target.onerror = null; e.target.src="https://placehold.co/300x150/cccccc/333333?text=Image+Not+Found"; }}
+                                />
+                                <p className="text-gray-700 text-lg leading-relaxed mb-6 px-2">
+                                    {currentStep.description}
+                                </p>
+                                <button
+                                    onClick={handleNext}
+                                    className="bg-blue-600 hover:bg-blue-700 text-white font-bold py-3 px-6 rounded-full shadow-lg transition-all duration-300 transform hover:scale-105 active:scale-95 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-opacity-75 text-xl"
+                                >
+                                    {currentStep.actionText}
+                                </button>
+                                {currentStep.skipText && (
+                                    <button
+                                        onClick={handleNext} // Clicking skip also moves to the next step
+                                        className="ml-4 bg-gray-400 hover:bg-gray-500 text-white font-bold py-3 px-6 rounded-full shadow-lg transition-all duration-300 transform hover:scale-105 active:scale-95 focus:outline-none focus:ring-2 focus:ring-gray-300 focus:ring-opacity-75 text-xl"
+                                    >
+                                        {currentStep.skipText}
+                                    </button>
+                                )}
+                            </div>
+                        ) : (
+                            // 完成訊息
+                            <div className="mb-8 p-6 bg-green-50 rounded-xl shadow-inner">
+                                <h2 className="text-3xl font-bold text-green-700 mb-4">恭喜您，已完成所有流程練習！</h2>
+                                <p className="text-gray-700 text-lg">
+                                    您已成功演練了119派遣台網路斷線的緊急應變操作流程。請牢記這些步驟，以備不時之需。
+                                </p>
+                            </div>
+                        )}
+
+                        {/* 導航按鈕 */}
+                        <div className="flex justify-between mt-8 w-full px-2">
+                            <button
+                                onClick={handlePrevious}
+                                disabled={currentStepIndex === 0}
+                                className={`bg-gray-300 hover:bg-gray-400 text-gray-800 font-bold py-2 px-4 rounded-full shadow-md transition-all duration-300 transform hover:scale-105 active:scale-95 ${currentStepIndex === 0 ? 'opacity-50 cursor-not-allowed' : ''}`}
+                            >
+                                上一步
+                            </button>
+                            {!isLastStep && currentStepIndex > 0 && ( // 僅在非第一步且非最後一步時顯示「下一步」
+                                <button
+                                    onClick={handleNext}
+                                    className="bg-blue-500 hover:bg-blue-600 text-white font-bold py-2 px-4 rounded-full shadow-md transition-all duration-300 transform hover:scale-105 active:scale-95"
+                                >
+                                    下一步
+                                </button>
+                            )}
+                            {(isLastStep || !currentStep) && ( // 在完成頁或最後一步顯示「重新開始」
+                                <button
+                                    onClick={handleRestart}
+                                    className="bg-purple-500 hover:bg-purple-600 text-white font-bold py-2 px-4 rounded-full shadow-md transition-all duration-300 transform hover:scale-105 active:scale-95"
+                                >
+                                    重新開始
+                                </button>
+                            )}
+                        </div>
+                    </div>
+                </div>
+            );
+        }
+
+        // 渲染 React 應用到 HTML 中的 root 元素
+        ReactDOM.createRoot(document.getElementById('root')).render(<App />);
+    </script>
+</body>
+</html>
