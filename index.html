@@ -23,10 +23,6 @@
     <div id="root"></div> <!-- React 應用將被掛載到此元素 -->
 
     <script type="text/babel">
-        // 在這裡放入你的 React App 組件代碼
-        // 將你之前 'network_disconnection_practice_app' 中的所有 React.js 代碼複製到這裡
-        // 從 `import React, { useState } from 'react';` 到 `export default App;` 的所有內容
-
         // 主應用程式組件
         function App() {
             // 定義所有操作步驟的數據
@@ -189,8 +185,8 @@
                 },
             ];
 
-            // 使用 useState 管理當前步驟的索引
-            const [currentStepIndex, setCurrentStepIndex] = useState(0);
+            // 使用 React.useState 管理當前步驟的索引 (已修正)
+            const [currentStepIndex, setCurrentStepIndex] = React.useState(0);
 
             // 處理「下一步」按鈕點擊事件
             const handleNext = () => {
